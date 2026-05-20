@@ -30,14 +30,35 @@ const openGoogleMaps = (lat, lng) => {
   window.open(`https://www.google.com/maps?q=${lat},${lng}`, "_blank");
 };
 
-const changeSort =(field) =>{
-    if(field === "sarea" || field === "sna" || field === "ar"){
-      filteredStations.value.sort((a, b) => a[field].localeCompare(b[field]));
-    }
-    else if(field === "available_rent_bikes" || field === "available_return_bikes"){
-      filteredStations.value.sort((a, b) => b[field] - a[field]);
-    };
+const changeSort = (field) => {
+  if (sortField.value !== field) {
+    sortField.value = field;
+    sortDirection.value = "asc";
+    return;
+  }
+  switch (sortDirection.value) {
+    case "asc":
+      sortDirection.value = "desc";
+      break;
+    case "desc":
+      sortDirection.value = "default";
+      break;
+    case "default":
+      sortDirection.value = "asc";
+      break;
+  }
 };
+
+const sortIcon = computed(() => {
+  switch (sortDirection.value) {
+    case "asc":
+      return "./Pics/sort-asc.svg";
+    case "desc":
+      return "./Pics/sort-desc.svg";
+    default:
+      return "./Pics/sort.svg";
+  }
+});
 </script>
 
 <template>
@@ -74,11 +95,11 @@ const changeSort =(field) =>{
             <tr>
               <th>項次</th>
               <th>
-                 場站區域
-                 <button class="sort-btn" @click="changeSort('sarea')">
-                   <img src="/Pics/sort.svg" alt="排序" class="sort-icon" />
-                 </button>
-               </th> 
+                場站區域
+                <button class="sort-btn" @click="changeSort('sarea')">
+                  <img src="/Pics/sort.svg" alt="排序" class="sort-icon" />
+                </button>
+              </th>
               <th>
                 站名
                 <button class="sort-btn" @click="changeSort('sna')">
@@ -93,19 +114,25 @@ const changeSort =(field) =>{
               </th>
               <th>
                 坐標位置
-                <button class="sort-btn" @click="">
+                <button class="sort-btn" @click="changeSort('latitude')">
                   <img src="/Pics/sort.svg" alt="排序" class="sort-icon" />
                 </button>
               </th>
               <th>
                 目前車輛數
-                <button class="sort-btn" @click="changeSort('available_rent_bikes')">
+                <button
+                  class="sort-btn"
+                  @click="changeSort('available_rent_bikes')"
+                >
                   <img src="/Pics/sort.svg" alt="排序" class="sort-icon" />
                 </button>
               </th>
               <th>
                 目前空位數
-                <button class="sort-btn" @click="changeSort('available_return_bikes')">
+                <button
+                  class="sort-btn"
+                  @click="changeSort('available_return_bikes')"
+                >
                   <img src="/Pics/sort.svg" alt="排序" class="sort-icon" />
                 </button>
               </th>
@@ -114,7 +141,7 @@ const changeSort =(field) =>{
           <tbody>
             <!--顯示前50筆資料，以及資料更新時間-->
             <tr
-              v-for="(station, index) in stations.slice(0, 50)"
+              v-for="(station, index) in filteredStations.slice(0, 50)"
               :key="station.sno"
               :title="`資料時間：${dataLoadTime}`"
             >
