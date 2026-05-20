@@ -86,6 +86,27 @@ const filteredStations = computed(() => {
   return result;
 });
 
+const changeSort = (field) => {
+  if (sortField.value !== field) {
+    sortField.value = field;
+    sortDirection.value = "asc";
+    return;
+  }
+  switch (sortDirection.value) {
+    case "asc":
+      sortDirection.value = "desc";
+      break;
+
+    case "desc":
+      sortDirection.value = "default";
+      break;
+
+    default:
+      sortDirection.value = "asc";
+      break;
+  }
+};
+
 // 重新整理找到最薪資料
 const handleRefresh = () => {
   query.value = "";
@@ -106,12 +127,16 @@ onMounted(() => {
         v-model:query="query"
         v-model:selectedArea="selectedArea"
         v-model:showAll="showAll"
+
         :areas="areas"
         :stations="filteredStations"
         :dataLoadTime="dataLoadTime"
         :totalStations="filteredStations.length"
+
         :sortField="sortField"
         :sortDirection="sortDirection"
+
+        @change-sort="changeSort"
         @refresh="handleRefresh"
       />
     </section>

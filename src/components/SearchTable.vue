@@ -4,7 +4,7 @@ const query = defineModel("query");
 const selectedArea = defineModel("selectedArea");
 const showAll = defineModel("showAll");
 
-defineProps({
+const props = defineProps({
   areas: {
     type: Array,
     required: true,
@@ -21,42 +21,28 @@ defineProps({
     type: Number,
     required: true,
   },
+  sortField:{
+    type: String,
+    required: true,
+  },
+  sortDirection:{
+    type: String,
+    required: true,
+  },
 });
 
-const emit = defineEmits(["refresh"]);
+const emit = defineEmits(["refresh", "change-sort"]);
 const formatName = (sna) => sna.replace("YouBike2.0_", "");
 const formatCoord = (lat, lng) => `(${lat.toFixed(6)}, ${lng.toFixed(6)})`;
 const openGoogleMaps = (lat, lng) => {
   window.open(`https://www.google.com/maps?q=${lat},${lng}`, "_blank");
 };
 
-const sortField = ref("");
-const sortDirection = ref("default");
-
-const changeSort = (field) => {
-  if (sortField.value !== field) {
-    sortField.value = field;
-    sortDirection.value = "asc";
-    return;
-  }
-  switch (sortDirection.value) {
-    case "asc":
-      sortDirection.value = "desc";
-      break;
-    case "desc":
-      sortDirection.value = "default";
-      break;
-    case "default":
-      sortDirection.value = "asc";
-      break;
-  }
-};
-
 const getSortIcon = (field) => {
-  if (sortField.value !== field) {
+  if (props.sortField.value !== field) {
     return "/Pics/sort.svg";
   }
-  switch (sortDirection.value) {
+  switch (props.$emitsortDirection.value) {
     case "asc":
       return "/Pics/sort-asc.svg";
     case "desc":
@@ -102,7 +88,7 @@ const getSortIcon = (field) => {
               <th>項次</th>
               <th>
                 場站區域
-                <button class="sort-btn" @click="changeSort('sarea')">
+                <button class="sort-btn" @click="changeSort('change-sort', 'sarea')">
                   <img
                     :src="getSortIcon('sarea')"
                     alt="排序"
@@ -112,7 +98,7 @@ const getSortIcon = (field) => {
               </th>
               <th>
                 站名
-                <button class="sort-btn" @click="changeSort('sna')">
+                <button class="sort-btn" @click="changeSort('change-sort','sna')">
                   <img
                     :src="getSortIcon('sna')"
                     alt="排序"
@@ -122,7 +108,7 @@ const getSortIcon = (field) => {
               </th>
               <th>
                 地點
-                <button class="sort-btn" @click="changeSort('ar')">
+                <button class="sort-btn" @click="changeSort('change-sort','ar')">
                   <img
                     :src="getSortIcon('ar')"
                     alt="排序"
@@ -132,7 +118,7 @@ const getSortIcon = (field) => {
               </th>
               <th>
                 坐標位置
-                <button class="sort-btn" @click="changeSort('latitude')">
+                <button class="sort-btn" @click="changeSort('change-sort','latitude')">
                   <img
                     :src="getSortIcon('latitude')"
                     alt="排序"
@@ -144,10 +130,10 @@ const getSortIcon = (field) => {
                 目前車輛數
                 <button
                   class="sort-btn"
-                  @click="changeSort('available_rent_bikes')"
+                  @click="changeSort('change-sort','available_rent_bikes')"
                 >
                   <img
-                    :src="getSortIcon('available_rent_bikes')"
+                    :src="getSortIcon('change-sort','available_rent_bikes')"
                     alt="排序"
                     class="sort-icon"
                   />
