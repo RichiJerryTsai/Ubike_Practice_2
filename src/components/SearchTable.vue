@@ -30,6 +30,9 @@ const openGoogleMaps = (lat, lng) => {
   window.open(`https://www.google.com/maps?q=${lat},${lng}`, "_blank");
 };
 
+const sortField = ref("");
+const sortDirection = ref("default");
+
 const changeSort = (field) => {
   if (sortField.value !== field) {
     sortField.value = field;
@@ -49,16 +52,19 @@ const changeSort = (field) => {
   }
 };
 
-const sortIcon = computed(() => {
+const getSortIcon = (field) => {
+  if (sortField.value !== field) {
+    return "/Pics/sort.svg";
+  }
   switch (sortDirection.value) {
     case "asc":
-      return "./Pics/sort-asc.svg";
+      return "/Pics/sort-asc.svg";
     case "desc":
-      return "./Pics/sort-desc.svg";
+      return "/Pics/sort-desc.svg";
     default:
-      return "./Pics/sort.svg";
+      return "/Pics/sort.svg";
   }
-});
+};
 </script>
 
 <template>
@@ -97,25 +103,41 @@ const sortIcon = computed(() => {
               <th>
                 場站區域
                 <button class="sort-btn" @click="changeSort('sarea')">
-                  <img src="/Pics/sort.svg" alt="排序" class="sort-icon" />
+                  <img
+                    :src="getSortIcon('sarea')"
+                    alt="排序"
+                    class="sort-icon"
+                  />
                 </button>
               </th>
               <th>
                 站名
                 <button class="sort-btn" @click="changeSort('sna')">
-                  <img src="/Pics/sort.svg" alt="排序" class="sort-icon" />
+                  <img
+                    :src="getSortIcon('sna')"
+                    alt="排序"
+                    class="sort-icon"
+                  />
                 </button>
               </th>
               <th>
                 地點
                 <button class="sort-btn" @click="changeSort('ar')">
-                  <img src="/Pics/sort.svg" alt="排序" class="sort-icon" />
+                  <img
+                    :src="getSortIcon('ar')"
+                    alt="排序"
+                    class="sort-icon"
+                  />
                 </button>
               </th>
               <th>
                 坐標位置
                 <button class="sort-btn" @click="changeSort('latitude')">
-                  <img src="/Pics/sort.svg" alt="排序" class="sort-icon" />
+                  <img
+                    :src="getSortIcon('latitude')"
+                    alt="排序"
+                    class="sort-icon"
+                  />
                 </button>
               </th>
               <th>
@@ -124,7 +146,11 @@ const sortIcon = computed(() => {
                   class="sort-btn"
                   @click="changeSort('available_rent_bikes')"
                 >
-                  <img src="/Pics/sort.svg" alt="排序" class="sort-icon" />
+                  <img
+                    :src="getSortIcon('available_rent_bikes')"
+                    alt="排序"
+                    class="sort-icon"
+                  />
                 </button>
               </th>
               <th>
@@ -133,7 +159,11 @@ const sortIcon = computed(() => {
                   class="sort-btn"
                   @click="changeSort('available_return_bikes')"
                 >
-                  <img src="/Pics/sort.svg" alt="排序" class="sort-icon" />
+                  <img
+                    :src="getSortIcon('available_return_bikes')"
+                    alt="排序"
+                    class="sort-icon"
+                  />
                 </button>
               </th>
             </tr>
@@ -141,7 +171,7 @@ const sortIcon = computed(() => {
           <tbody>
             <!--顯示前50筆資料，以及資料更新時間-->
             <tr
-              v-for="(station, index) in filteredStations.slice(0, 50)"
+              v-for="(station, index) in stations.slice(0, 50)"
               :key="station.sno"
               :title="`資料時間：${dataLoadTime}`"
             >

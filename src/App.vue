@@ -110,6 +110,8 @@ onMounted(() => {
         :stations="filteredStations"
         :dataLoadTime="dataLoadTime"
         :totalStations="filteredStations.length"
+        :sortField="sortField"
+        :sortDirection="sortDirection"
         @refresh="handleRefresh"
       />
     </section>
