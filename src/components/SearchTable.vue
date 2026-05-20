@@ -39,10 +39,10 @@ const openGoogleMaps = (lat, lng) => {
 };
 
 const getSortIcon = (field) => {
-  if (props.sortField.value !== field) {
+  if (props.sortField !== field) {
     return "/Pics/sort.svg";
   }
-  switch (props.$emitsortDirection.value) {
+  switch (props.sortDirection) {
     case "asc":
       return "/Pics/sort-asc.svg";
     case "desc":
@@ -88,7 +88,7 @@ const getSortIcon = (field) => {
               <th>項次</th>
               <th>
                 場站區域
-                <button class="sort-btn" @click="changeSort('change-sort', 'sarea')">
+                <button class="sort-btn" @click="$emit('change-sort', 'sarea')">
                   <img
                     :src="getSortIcon('sarea')"
                     alt="排序"
@@ -98,7 +98,7 @@ const getSortIcon = (field) => {
               </th>
               <th>
                 站名
-                <button class="sort-btn" @click="changeSort('change-sort','sna')">
+                <button class="sort-btn" @click="$emit('change-sort', 'sna')">
                   <img
                     :src="getSortIcon('sna')"
                     alt="排序"
@@ -108,7 +108,7 @@ const getSortIcon = (field) => {
               </th>
               <th>
                 地點
-                <button class="sort-btn" @click="changeSort('change-sort','ar')">
+                <button class="sort-btn" @click="$emit('change-sort', 'ar')">
                   <img
                     :src="getSortIcon('ar')"
                     alt="排序"
@@ -118,7 +118,7 @@ const getSortIcon = (field) => {
               </th>
               <th>
                 坐標位置
-                <button class="sort-btn" @click="changeSort('change-sort','latitude')">
+                <button class="sort-btn" @click="$emit('change-sort', 'latitude')">
                   <img
                     :src="getSortIcon('latitude')"
                     alt="排序"
@@ -130,10 +130,10 @@ const getSortIcon = (field) => {
                 目前車輛數
                 <button
                   class="sort-btn"
-                  @click="changeSort('change-sort','available_rent_bikes')"
+                  @click="$emit('change-sort', 'available_rent_bikes')"
                 >
                   <img
-                    :src="getSortIcon('change-sort','available_rent_bikes')"
+                    :src="getSortIcon('available_rent_bikes')"
                     alt="排序"
                     class="sort-icon"
                   />
@@ -143,7 +143,7 @@ const getSortIcon = (field) => {
                 目前空位數
                 <button
                   class="sort-btn"
-                  @click="changeSort('available_return_bikes')"
+                  @click="$emit('change-sort', 'available_return_bikes')"
                 >
                   <img
                     :src="getSortIcon('available_return_bikes')"
