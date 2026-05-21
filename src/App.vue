@@ -58,7 +58,8 @@ const filteredStations = computed(() => {
         : true;
       const matchText = text
         ? station.sna.toLowerCase().includes(text) ||
-          station.sarea.toLowerCase().includes(text)
+          station.sarea.toLowerCase().includes(text) ||
+          station.ar.toLowerCase().includes(text)
         : true;
       const matchShowAll = showAll.value
         ? station.available_rent_bikes > 0
@@ -70,7 +71,7 @@ const filteredStations = computed(() => {
   if (sortDirection.value === "default" || !sortField.value) {
     return result;
   }
-
+  // 如果是文字用 localeCompare 排序，否則用數字大小排序
   result.sort((a, b) => {
     const field = sortField.value;
     if (field === "sna" || field === "sarea" || field === "ar") {
