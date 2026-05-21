@@ -2,7 +2,7 @@
 import { computed, ref } from "vue";
 const query = defineModel("query");
 const selectedArea = defineModel("selectedArea");
-const showAll = defineModel("showAll");
+const showStationWithBike = defineModel("showStationWithBike");
 
 const props = defineProps({
   areas: {
@@ -71,7 +71,7 @@ const getSortIcon = (field) => {
     </label>
 
     <label class="checkbox-field">
-      <input type="checkbox" v-model="showAll" />
+      <input type="checkbox" v-model="showStationWithBike" />
       <span>只顯示有車輛的站點</span>
     </label>
     <button class="secondary" type="button" @click="$emit('refresh')">
@@ -288,7 +288,7 @@ const getSortIcon = (field) => {
 .result-table td {
   padding: 14px 16px;
   border-bottom: 1px solid #e5e7eb;
-  text-align: center;
+  text-align: left;
 }
 
 .result-table th {

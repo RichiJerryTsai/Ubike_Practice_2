@@ -36,9 +36,6 @@ select {
 
 button,
 a,
-select,
-input[type="checkbox"],
-[on-click],
 clickable {
   cursor: pointer;
 }

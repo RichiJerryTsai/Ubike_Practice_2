@@ -1,6 +1,8 @@
 <script setup>
 import { ref, computed, onMounted } from "vue";
 import SearchTable from "./components/SearchTable.vue";
+import axios from "axios";
+import dayjs from "dayjs";
 
 const stations = ref([]);
 const dataLoadTime = ref("");
@@ -8,7 +10,7 @@ const isLoading = ref(true);
 
 const query = ref("");
 const selectedArea = ref("");
-const showAll = ref(false);
+const showStationWithBike = ref(false);
 
 const sortField = ref("");
 const sortDirection = ref("default");
@@ -16,21 +18,19 @@ const sortDirection = ref("default");
 // 幫忙數字補零，確保格式一致
 const pad2 = (value) => String(value).padStart(2, "0");
 
-//格式化日期時間，月份要特別注意 + 1
-const formatDate = (date) =>
-  `${date.getFullYear()}-${pad2(date.getMonth() + 1)}-${pad2(date.getDate())} ${pad2(date.getHours())}:${pad2(date.getMinutes())}:${pad2(date.getSeconds())}`;
+const formatDate = (date) => {
+  return dayjs(date).format("YYYY-MM-DD HH:mm:ss");
+};
 
 // 從官方 API 載入 YouBike 站點資料
 const loadStations = async () => {
   isLoading.value = true;
   try {
-    const response = await fetch(
+    const response = await axios.get(
       "https://tcgbusfs.blob.core.windows.net/dotapp/youbike/v2/youbike_immediate.json",
     );
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    stations.value = await response.json();
+
+    stations.value =response.data;
     dataLoadTime.value = formatDate(new Date());
   } catch (error) {
     console.error("Failed to Load YouBike data:", error);
@@ -61,10 +61,10 @@ const filteredStations = computed(() => {
           station.sarea.toLowerCase().includes(text) ||
           station.ar.toLowerCase().includes(text)
         : true;
-      const matchShowAll = showAll.value
+      const matchShowStationWithBike = showStationWithBike.value
         ? station.available_rent_bikes > 0
         : true;
-      return matchArea && matchText && matchShowAll;
+      return matchArea && matchText && matchShowStationWithBike;
     })
     .sort((a, b) => b.available_rent_bikes - a.available_rent_bikes);
 
@@ -112,7 +112,7 @@ const changeSort = (field) => {
 const handleRefresh = () => {
   query.value = "";
   selectedArea.value = "";
-  showAll.value = false;
+  showStationWithBike.value = false;
   loadStations();
 };
 
@@ -127,7 +127,7 @@ onMounted(() => {
       <SearchTable
         v-model:query="query"
         v-model:selectedArea="selectedArea"
-        v-model:showAll="showAll"
+        v-model:showStationWithBike="showStationWithBike"
 
         :areas="areas"
         :stations="filteredStations"
