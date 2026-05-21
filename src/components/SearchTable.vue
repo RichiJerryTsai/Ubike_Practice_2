@@ -183,7 +183,7 @@ const getSortIcon = (field) => {
     </div>
   </div>
   <div class="table-footer">
-    <div>資料筆數：{{ totalStations }}</div>
+    <div>資料筆數：{{ totalStations.toLocaleString() }}</div>
     <div>資料更新時間：{{ dataLoadTime }}</div>
   </div>
 </template>
@@ -193,7 +193,7 @@ const getSortIcon = (field) => {
 .search-panel {
   display: grid;
   gap: 30px;
-  grid-template-columns: repeat(3, 1fr) 100px;
+  grid-template-columns: repeat(3, 1fr) auto;
   align-items: center;
   width: 100%;
 }
@@ -251,6 +251,7 @@ const getSortIcon = (field) => {
   height: 12px;
   margin-right: 4px;
   vertical-align: middle;
+  object-fit: contain;
 }
 
 /* Result Table */
@@ -260,12 +261,14 @@ const getSortIcon = (field) => {
   background: var(--bg);
   margin: 16px 0;
 }
+
 /* 固定表格表頭 */
 .result-table thead th {
   position: sticky;
   top: 0;
   z-index: 2;
 }
+
 /*限制表格高度*/
 .result-table-wrapper {
   max-height: 700px;
@@ -276,7 +279,7 @@ const getSortIcon = (field) => {
 .result-table {
   width: 100%;
   border-collapse: collapse;
-  background: #ffffff;
+  background: var(--bg);
   border-left: 1px solid var(--border);
   border-right: 1px solid var(--border);
 }
@@ -310,7 +313,6 @@ const getSortIcon = (field) => {
   border: none;
   padding: 0;
   margin-left: 4px;
-  cursor: pointer;
 }
 
 .sort-icon {
@@ -362,7 +364,7 @@ const getSortIcon = (field) => {
   align-items: center;
   min-height: 50px;
   padding: 0 16px;
-  background: #ffffff;
+  background: var(--bg);
   border: 1px solid var(--border);
   border-top: 1px solid var(--border);
   color: var(--muted);
